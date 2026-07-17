@@ -1,7 +1,6 @@
 # SQS Processor Gem
 
-A Ruby gem for processing messages from Amazon SQS queues with configurable
-message handling and error recovery.
+A Ruby gem for processing messages from Amazon SQS queues with configurable message handling and error recovery.
 
 ## Features
 
@@ -11,8 +10,7 @@ message handling and error recovery.
 - **Customizable**: Extensible message processing logic
 - **Logging**: Comprehensive logging with configurable levels
 - **Graceful Shutdown**: Handles SIGTERM, SIGINT, and SIGQUIT signals gracefully
-- **Environment Variables**: Support for AWS credentials and configuration via
-  environment variables
+- **Environment Variables**: Support for AWS credentials and configuration via environment variables
 
 ## Prerequisites
 
@@ -85,17 +83,14 @@ processor.process_messages
 
 ## Message Processing
 
-The gem uses a hook-based approach for message processing. You must implement
-the `handle_message` method in your subclass to define how messages should be
-processed.
+The gem uses a hook-based approach for message processing. You must implement the `handle_message` method in your subclass to define how messages should be processed.
 
 ### Hook Method
 
 The `handle_message(body)` method receives:
 - `body`: The parsed JSON body of the message
 
-Return `true` if processing was successful (message will be deleted from queue),
-or `false` if processing failed (message will remain in queue for retry).
+Return `true` if processing was successful (message will be deleted from queue), or `false` if processing failed (message will remain in queue for retry).
 
 ### Example Message Format
 
@@ -109,8 +104,7 @@ or `false` if processing failed (message will remain in queue for retry).
 
 ### Custom Processing
 
-To implement custom message processing logic, create a subclass of
-`SQSProcessor::Processor` and override the `handle_message` method:
+To implement custom message processing logic, create a subclass of `SQSProcessor::Processor` and override the `handle_message` method:
 
 ```ruby
 require 'sqs_processor'
@@ -168,16 +162,14 @@ The `SQSProcessor::Processor.new` method accepts the following parameters:
 - `aws_region:` (optional, default: 'us-east-1') - AWS region
 - `aws_session_token:` (optional) - AWS session token for temporary credentials
 - `max_messages:` (optional, default: 10) - Maximum messages per batch
-- `visibility_timeout:` (optional, default: 30) - Message visibility timeout in
-  seconds
+- `visibility_timeout:` (optional, default: 30) - Message visibility timeout in seconds
 - `logger:` (optional) - Custom logger instance
 
 ### Environment Variables
 
 - `DATA_SYNC_AWS_ACCESS_KEY_ID`: Your AWS access key
 - `DATA_SYNC_AWS_SECRET_ACCESS_KEY`: Your AWS secret key
-- `DATA_SYNC_AWS_SESSION_TOKEN`: Your AWS session token (optional, for temporary
-  credentials)
+- `DATA_SYNC_AWS_SESSION_TOKEN`: Your AWS session token (optional, for temporary credentials)
 - `DATA_SYNC_AWS_REGION`: AWS region (default: us-east-1)
 - `DATA_SYNC_SQS_QUEUE_URL`: Your SQS queue URL
 
@@ -186,20 +178,16 @@ The `SQSProcessor::Processor.new` method accepts the following parameters:
 The gem supports multiple ways to provide AWS credentials:
 
 1. **Initializer Configuration**: Set credentials in the initializer block
-2. **Environment Variables**: Use the `DATA_SYNC_` prefixed environment
-   variables
-3. **AWS SDK Default Chain**: If no credentials are provided, the AWS SDK will
-   use its default credential provider chain (IAM roles, AWS CLI, etc.)
+2. **Environment Variables**: Use the `DATA_SYNC_` prefixed environment variables
+3. **AWS SDK Default Chain**: If no credentials are provided, the AWS SDK will use its default credential provider chain (IAM roles, AWS CLI, etc.)
 4. **Direct Parameter**: Pass credentials directly to the processor constructor
 
 The script supports multiple ways to provide AWS credentials:
 
-1. **Environment Variables**: Set `AWS_ACCESS_KEY_ID` and
-   `AWS_SECRET_ACCESS_KEY`
+1. **Environment Variables**: Set `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
 2. **IAM Roles**: If running on EC2 with IAM roles
 3. **AWS CLI**: If you have AWS CLI configured
-4. **AWS SDK Default Credential Provider Chain**: Automatic credential
-   resolution
+4. **AWS SDK Default Credential Provider Chain**: Automatic credential resolution
 
 ## Error Handling
 
@@ -217,15 +205,13 @@ The processor handles termination signals gracefully:
 - **SIGQUIT**: Quit signal
 
 When a shutdown signal is received:
-1. The processor immediately interrupts any blocking operations (like SQS
-   polling)
+1. The processor immediately interrupts any blocking operations (like SQS polling)
 2. Stops accepting new messages
 3. Completes processing of any current message batch
 4. Logs the shutdown process
 5. Exits cleanly
 
-**Immediate Response**: Like Puma, the processor responds to shutdown signals
-immediately, interrupting any blocking operations without waiting for timeouts.
+**Immediate Response**: Like Puma, the processor responds to shutdown signals immediately, interrupting any blocking operations without waiting for timeouts.
 
 ## Monitoring
 
@@ -238,26 +224,21 @@ The script provides detailed logging including:
 
 ## Best Practices
 
-1. **Set appropriate visibility timeout**: Should be longer than your processing
-   time
+1. **Set appropriate visibility timeout**: Should be longer than your processing time
 2. **Use long polling**: Reduces API calls and costs
-3. **Handle errors gracefully**: Return `false` from processing methods to keep
-   messages in queue
+3. **Handle errors gracefully**: Return `false` from processing methods to keep messages in queue
 4. **Monitor queue depth**: Use the built-in queue attribute reporting
 5. **Use appropriate batch sizes**: Balance between throughput and memory usage
-6. **Deploy with graceful shutdown**: The processor handles SIGTERM gracefully
-   for container deployments
+6. **Deploy with graceful shutdown**: The processor handles SIGTERM gracefully for container deployments
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **"Queue URL is required"**: Set `DATA_SYNC_SQS_QUEUE_URL` environment
-   variable or use `-q` option
+1. **"Queue URL is required"**: Set `DATA_SYNC_SQS_QUEUE_URL` environment variable or use `-q` option
 2. **"Access Denied"**: Check AWS credentials and SQS permissions
 3. **"Queue does not exist"**: Verify queue URL and region
-4. **Messages not being processed**: Check visibility timeout and processing
-   logic
+4. **Messages not being processed**: Check visibility timeout and processing logic
 
 ### Debug Mode
 
@@ -295,5 +276,4 @@ bundle exec rake release
 
 ## License
 
-This gem is licensed under the MIT License - see the [LICENSE](LICENSE) file for
-details.
+This gem is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
